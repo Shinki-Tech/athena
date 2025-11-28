@@ -1,4 +1,0 @@
-package com.shinki.athena.client;
-
-public interface BacenApiClient {
-}
