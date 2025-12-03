@@ -1,0 +1,36 @@
+services:
+  # Banco de Dados PostgreSQL
+  postgres:
+    image: postgres:16-alpine
+    container_name: athena-db
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - athena-network
+    restart: unless-stopped
+
+  # Interface visual para o Banco (PgAdmin)
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: athena-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@athena.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    networks:
+      - athena-network
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+
+networks:
+  athena-network:
